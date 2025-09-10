@@ -1,6 +1,6 @@
 # Projeto CG
 
-Uma breve descrição sobre o que seu projeto faz. Por exemplo: "Um renderizador 3D simples implementado em C utilizando a biblioteca OpenGL." ou "Implementação dos algoritseção de rasterização de retas e polígonos."
+Casa Museu do primeiro presidente do Brasil feito em openGL com a linguagem C.
 
 ## Estrutura do Projeto
 
@@ -24,3 +24,15 @@ O projeto está organizado da seguinte forma:
   - **`build/`**: Contém os arquivos objeto (`.o`) gerados durante o processo de compilação.
   - **`include/`**: Contém os arquivos de cabeçalho (`.h`) com as declarações de funções e estruturas.
   - **`src/`**: Contém o código-fonte (`.c`), incluindo o arquivo `main.c` que é o ponto de entrada do programa.
+
+## Makefile
+
+| Comando | Função |
+|---------|--------|
+| `make` ou `make all` | Compila todo o projeto |
+| `make clean` | Remove arquivos objeto (.o) |
+| `make cleanall` | Remove arquivos objeto e executável |
+| `make run` | Compila e executa o programa |
+| `make install-deps` | Instala dependências OpenGL (Ubuntu/Debian) |
+| `make info` | Mostra informações do projeto |
+| `make debug` | Mostra variáveis internas do Makefile |
