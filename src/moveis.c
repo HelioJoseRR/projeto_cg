@@ -7,7 +7,7 @@
 void draw_moveis_museu()
 {
     // Sala principal (térreo)
-    draw_mesa_exposicao(3.0f, 0.0f, 0.0f);
+    draw_mesa_exposicao(0.0f, 0.0f, 0.0f);
 }
 
 void draw_mesa_exposicao(float x, float y, float z)

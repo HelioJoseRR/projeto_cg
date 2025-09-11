@@ -13,7 +13,7 @@
 // Variáveis de posição e câmera
 float camera_x = 0.0f;
 float camera_y = 1.7f;
-float camera_z = 1.0f;
+float camera_z = 5.0f;
 
 float camera_yaw = 0.0f;   // Rotação horizontal (esquerda/direita)
 float camera_pitch = 0.0f; // Rotação vertical (cima/baixo)
