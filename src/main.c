@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "../include/floor.h"
-#include "../include/casa.h"
+#include "../include/house.h"
 #include "../include/escada.h"
 #include "../include/moveis.h"
 
@@ -60,7 +60,7 @@ void display()
 
     // Desenhar a Casa Museu completa
     glPushMatrix();
-        draw_casa_museu();
+        draw_casa_museu(0.0f, 0.0f, 0.0f, 1.5f);
     glPopMatrix();
     
     // Desenhar a escada em U
