@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include "../include/floor.h"
+#include "../include/casa.h"
+#include "../include/escada.h"
+#include "../include/moveis.h"
 
 #define FLOOR_SIZE 1000.0f
 #define PI 3.14159265359
@@ -55,10 +58,19 @@ void display()
         draw_floor(FLOOR_SIZE);
     glPopMatrix();
 
-    glColor3f(1.0f, 0.0f, 0.0f); // Cor vermelha para o objeto
+    // Desenhar a Casa Museu completa
     glPushMatrix();
-        glTranslatef(0.0f, 1.0f, 0.0f);
-        glutWireTeapot(1.0);
+        draw_casa_museu();
+    glPopMatrix();
+    
+    // Desenhar a escada em U
+    glPushMatrix();
+        draw_escada_completa();
+    glPopMatrix();
+    
+    // Desenhar móveis e objetos do museu
+    glPushMatrix();
+        draw_moveis_museu();
     glPopMatrix();
 
     glutSwapBuffers();
@@ -104,6 +116,18 @@ void keyboard(unsigned char key, int x, int y)
             // Move para direita (strafe)
             camera_x += cos(yaw_rad) * move_speed;
             camera_z += sin(yaw_rad) * move_speed;
+            break;
+        case 'q':
+        case 'Q':
+            // Move câmera para cima
+            camera_y += move_speed;
+            break;
+        case 'e':
+        case 'E':
+            // Move câmera para baixo
+            camera_y -= move_speed;
+            // Evita que a câmera vá abaixo do chão
+            if(camera_y < 0.5f) camera_y = 0.5f;
             break;
         default:
             break;
