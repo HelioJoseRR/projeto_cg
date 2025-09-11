@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include "../include/floor.h"
+#include "../include/house.h"
+#include "../include/escada.h"
+#include "../include/moveis.h"
 
 #define FLOOR_SIZE 1000.0f
 #define PI 3.14159265359
@@ -10,7 +13,7 @@
 // Variáveis de posição e câmera
 float camera_x = 0.0f;
 float camera_y = 1.7f;
-float camera_z = 1.0f;
+float camera_z = 5.0f;
 
 float camera_yaw = 0.0f;   // Rotação horizontal (esquerda/direita)
 float camera_pitch = 0.0f; // Rotação vertical (cima/baixo)
@@ -29,7 +32,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(600, 600);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Casa Museu - Marechal Deodoro");
     init();
@@ -55,10 +58,21 @@ void display()
         draw_floor(FLOOR_SIZE);
     glPopMatrix();
 
-    glColor3f(1.0f, 0.0f, 0.0f); // Cor vermelha para o objeto
+    // Desenhar a Casa Museu completa
     glPushMatrix();
-        glTranslatef(0.0f, 1.0f, 0.0f);
-        glutWireTeapot(1.0);
+        draw_casa_museu(0.0f, 0.0f, 0.0f, CASA_SCALE);
+    glPopMatrix();
+    
+    // Desenhar a escada em U
+    glPushMatrix();
+        glTranslatef(0.0f, 0.0f, -CASA_PROFUNDIDADE/5);
+        glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+        draw_escada_completa();
+    glPopMatrix();
+    
+    // Desenhar móveis e objetos do museu
+    glPushMatrix();
+        draw_moveis_museu();
     glPopMatrix();
 
     glutSwapBuffers();
@@ -104,6 +118,18 @@ void keyboard(unsigned char key, int x, int y)
             // Move para direita (strafe)
             camera_x += cos(yaw_rad) * move_speed;
             camera_z += sin(yaw_rad) * move_speed;
+            break;
+        case 'q':
+        case 'Q':
+            // Move câmera para cima
+            camera_y += move_speed;
+            break;
+        case 'e':
+        case 'E':
+            // Move câmera para baixo
+            camera_y -= move_speed;
+            // Evita que a câmera vá abaixo do chão
+            if(camera_y < 0.5f) camera_y = 0.5f;
             break;
         default:
             break;
