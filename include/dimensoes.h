@@ -103,4 +103,9 @@
 #define COR_MOVEL_G         0.3f     // Verde - móveis de madeira
 #define COR_MOVEL_B         0.1f     // Azul - móveis de madeira
 
+// Cabideiro
+#define CABIDEIRO_LARGURA   2.8f     // Largura do cabideiro
+#define CABIDEIRO_PROFUNDIDADE 0.1f  // Profundidade do cabideiro
+#define CABIDEIRO_ALTURA    0.2f     // Altura do cabideiro
+
 #endif // DIMENSOES_H
