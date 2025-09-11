@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(600, 600);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Casa Museu - Marechal Deodoro");
     init();
@@ -60,11 +60,13 @@ void display()
 
     // Desenhar a Casa Museu completa
     glPushMatrix();
-        draw_casa_museu(0.0f, 0.0f, 0.0f, 1.5f);
+        draw_casa_museu(0.0f, 0.0f, 0.0f, CASA_SCALE);
     glPopMatrix();
     
     // Desenhar a escada em U
     glPushMatrix();
+        glTranslatef(0.0f, 0.0f, -CASA_PROFUNDIDADE/5);
+        glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
         draw_escada_completa();
     glPopMatrix();
     

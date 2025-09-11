@@ -4,10 +4,11 @@
 // ===== DIMENSÕES GERAIS DA CASA MUSEU =====
 
 // Dimensões da casa principal
-#define CASA_LARGURA        20.0f    // Largura da casa (eixo X)
-#define CASA_PROFUNDIDADE   15.0f    // Profundidade da casa (eixo Z)
-#define CASA_ALTURA_PAREDE  4.0f     // Altura das paredes do térreo
+#define CASA_LARGURA        16.0f    // Largura da casa (eixo X)
+#define CASA_PROFUNDIDADE   14.0f    // Profundidade da casa (eixo Z)
+#define CASA_ALTURA_PAREDE  3.5f     // Altura das paredes do térreo
 #define CASA_ALTURA_TETO    2.0f     // Altura adicional do teto
+#define CASA_SCALE         1.5f     // Fator de escala geral da casa
 
 // Dimensões do primeiro andar
 #define ANDAR1_ALTURA_PAREDE 3.5f    // Altura das paredes do 1º andar
@@ -19,14 +20,14 @@
 #define ESCADA_LARGURA      2.0f     // Largura da escada
 #define ESCADA_TRECHO1_COMP 6.0f     // Comprimento do primeiro trecho
 #define ESCADA_TRECHO2_COMP 4.0f     // Comprimento do segundo trecho (volta)
-#define ESCADA_ALTURA_TOTAL 4.0f     // Altura total da escada
+#define ESCADA_ALTURA_TOTAL 1.6f     // Altura total da escada
 #define ESCADA_NUM_DEGRAUS  16       // Número total de degraus
 #define ESCADA_ALTURA_DEGRAU (ESCADA_ALTURA_TOTAL / ESCADA_NUM_DEGRAUS)
 
 // Patamar intermediário
-#define PATAMAR_LARGURA     2.0f     // Largura do patamar
-#define PATAMAR_PROFUNDIDADE 2.0f    // Profundidade do patamar
-#define PATAMAR_ALTURA      2.0f     // Altura do patamar intermediário
+#define PATAMAR_LARGURA     1.4f     // Largura do patamar
+#define PATAMAR_PROFUNDIDADE 1.5f    // Profundidade do patamar
+#define PATAMAR_ALTURA      (8 * 0.15f)     // Altura do patamar intermediário
 
 // ===== DIMENSÕES DE PORTAS E JANELAS =====
 

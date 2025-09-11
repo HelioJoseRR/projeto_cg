@@ -41,9 +41,9 @@ void draw_patamar_intermediario()
 {
     Color3D cor_patamar = {0.6f, 0.5f, 0.4f}; // Cor de madeira natural
     
-    float altura_patamar = 8 * 0.15f; // Altura após 8 degraus (1.2f)
-    float largura_patamar = 1.4f; // Mesma largura da escada
-    float profundidade_patamar = 1.5f; // Espaço suficiente para virar
+    float altura_patamar = PATAMAR_ALTURA; // Altura após 8 degraus (1.2f)
+    float largura_patamar = PATAMAR_LARGURA; // Mesma largura da escada
+    float profundidade_patamar = PATAMAR_PROFUNDIDADE; // Espaço suficiente para virar
     
     // Posição do patamar: conecta o final do trecho1 com o início do trecho2
     float x_centro = 0.0f;

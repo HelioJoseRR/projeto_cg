@@ -1,4 +1,5 @@
 #include "../include/house.h"
+#include "../include/dimensoes.h"
 #include <GL/glut.h>
 #include <math.h>
 
@@ -137,7 +138,7 @@ void draw_colonial_lamp(float x, float y, float z)
     glColor3f(0.2f, 0.2f, 0.2f);
     glPushMatrix();
         glRotatef(-90, 1, 0, 0);
-        glutSolidCylinder(0.02f, 0.3f, 8, 8);
+        glutSolidCone(0.02f, 0.3f, 8, 8);
     glPopMatrix();
     
     // Parte superior da luminária
@@ -225,11 +226,38 @@ void draw_casa_museu(float x, float y, float z, float scale)
     glScalef(scale, scale, scale);
     
     // Dimensões da casa
-    float house_width = 16.0f;
-    float house_depth = 14.0f;
-    float wall_height = 3.5f;
-    float roof_height = 1.5f;
-    
+    float house_width = CASA_LARGURA;
+    float house_depth = CASA_PROFUNDIDADE;
+    float wall_height = CASA_ALTURA_PAREDE;
+    float roof_height = CASA_ALTURA_TETO;
+
+    // Parede Esquerda Meio da Casa
+    glColor3f(0.5, 0.5f, 0.5f); // Cinza claro
+    glBegin(GL_QUADS);
+        glVertex3f(-house_width/6, 0, -house_depth/4);
+        glVertex3f(-house_width/6, 0, house_depth/4);
+        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, house_depth/4);
+        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, -house_depth/4);
+    glEnd();
+
+    // Parede Direita Meio da Casa e Grudada na Escada
+    glColor3f(0.5, 0.5f, 0.5f); // Cinza claro
+    glBegin(GL_QUADS);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, 0, -house_depth/4);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, 0, house_depth/4);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, house_depth/4);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, -house_depth/4);
+    glEnd();
+
+    // Piso Superior (1º Andar) começa na frente da escada
+    glColor3f(0.8f, 0.8f, 0.8f); // Cinza claro
+    glBegin(GL_QUADS);
+        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, -house_depth/4 + ESCADA_LARGURA);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, -house_depth/4 + ESCADA_LARGURA);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, house_depth/4);
+        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, house_depth/4);
+    glEnd();
+
     // Parede principal (frente)
     glColor3f(0.95f, 0.95f, 0.95f); // Branco
     glBegin(GL_QUADS);
