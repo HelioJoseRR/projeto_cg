@@ -7,7 +7,7 @@
 void draw_moveis_museu()
 {
     // Sala principal (térreo)
-    draw_mesa_exposicao(0.0f, 0.0f, 0.0f);
+    draw_mesa_exposicao(CASA_LARGURA/2 + 2.0f, 0.0f, CASA_PROFUNDIDADE - 5.0f);
 }
 
 void draw_mesa_exposicao(float x, float y, float z)
@@ -16,6 +16,7 @@ void draw_mesa_exposicao(float x, float y, float z)
     
     glPushMatrix();
     glTranslatef(x, y, z);
+    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
     
     // Tampo da mesa
     Vertex3D tampo[4] = {

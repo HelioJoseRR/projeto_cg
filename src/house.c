@@ -1,5 +1,6 @@
 #include "../include/house.h"
 #include "../include/dimensoes.h"
+#include "../include/makePolygon.h"
 #include <GL/glut.h>
 #include <math.h>
 
@@ -219,6 +220,127 @@ void draw_colonial_roof(float x, float y, float z, float width, float depth, flo
     glPopMatrix();
 }
 
+void draw_thick_floor(float x1, float z1, float x2, float z2, float y, float thickness)
+{
+    Color3D floor_color = {0.8f, 0.8f, 0.8f}; // Cinza claro
+    
+    // Face superior do piso
+    Vertex3D top_vertices[4] = {
+        {x1, y + thickness/2, z1},
+        {x2, y + thickness/2, z1},
+        {x2, y + thickness/2, z2},
+        {x1, y + thickness/2, z2}
+    };
+    makePolygon(top_vertices, 4, floor_color);
+    
+    // Face inferior do piso
+    Vertex3D bottom_vertices[4] = {
+        {x1, y - thickness/2, z1},
+        {x1, y - thickness/2, z2},
+        {x2, y - thickness/2, z2},
+        {x2, y - thickness/2, z1}
+    };
+    makePolygon(bottom_vertices, 4, floor_color);
+    
+    // Bordas laterais
+    Color3D edge_color = {0.7f, 0.7f, 0.7f}; // Cinza mais escuro para bordas
+    
+    // Borda frontal
+    Vertex3D front_vertices[4] = {
+        {x1, y - thickness/2, z2},
+        {x2, y - thickness/2, z2},
+        {x2, y + thickness/2, z2},
+        {x1, y + thickness/2, z2}
+    };
+    makePolygon(front_vertices, 4, edge_color);
+    
+    // Borda traseira
+    Vertex3D back_vertices[4] = {
+        {x1, y - thickness/2, z1},
+        {x1, y + thickness/2, z1},
+        {x2, y + thickness/2, z1},
+        {x2, y - thickness/2, z1}
+    };
+    makePolygon(back_vertices, 4, edge_color);
+    
+    // Borda esquerda
+    Vertex3D left_vertices[4] = {
+        {x1, y - thickness/2, z1},
+        {x1, y - thickness/2, z2},
+        {x1, y + thickness/2, z2},
+        {x1, y + thickness/2, z1}
+    };
+    makePolygon(left_vertices, 4, edge_color);
+    
+    // Borda direita
+    Vertex3D right_vertices[4] = {
+        {x2, y - thickness/2, z1},
+        {x2, y + thickness/2, z1},
+        {x2, y + thickness/2, z2},
+        {x2, y - thickness/2, z2}
+    };
+    makePolygon(right_vertices, 4, edge_color);
+}
+
+void draw_thick_wall(float x1, float z1, float x2, float z2, float y_base, float y_top, float thickness)
+{
+    Color3D wall_color = {0.5f, 0.5f, 0.5f}; // Cinza
+    Color3D edge_color = {0.4f, 0.4f, 0.4f}; // Cinza mais escuro para bordas
+    
+    // Calcular vetores da parede
+    float dx = x2 - x1;
+    float dz = z2 - z1;
+    float length = sqrt(dx*dx + dz*dz);
+    
+    // Vetor normal perpendicular
+    float nx = -dz / length * thickness / 2;
+    float nz = dx / length * thickness / 2;
+    
+    // Face externa da parede
+    Vertex3D outer_vertices[4] = {
+        {x1 + nx, y_base, z1 + nz},
+        {x2 + nx, y_base, z2 + nz},
+        {x2 + nx, y_top, z2 + nz},
+        {x1 + nx, y_top, z1 + nz}
+    };
+    makePolygon(outer_vertices, 4, wall_color);
+    
+    // Face interna da parede
+    Vertex3D inner_vertices[4] = {
+        {x1 - nx, y_base, z1 - nz},
+        {x1 - nx, y_top, z1 - nz},
+        {x2 - nx, y_top, z2 - nz},
+        {x2 - nx, y_base, z2 - nz}
+    };
+    makePolygon(inner_vertices, 4, wall_color);
+    
+    // Face superior da parede
+    Vertex3D top_vertices[4] = {
+        {x1 - nx, y_top, z1 - nz},
+        {x1 + nx, y_top, z1 + nz},
+        {x2 + nx, y_top, z2 + nz},
+        {x2 - nx, y_top, z2 - nz}
+    };
+    makePolygon(top_vertices, 4, edge_color);
+    
+    // Faces laterais (extremidades da parede)
+    Vertex3D end1_vertices[4] = {
+        {x1 - nx, y_base, z1 - nz},
+        {x1 + nx, y_base, z1 + nz},
+        {x1 + nx, y_top, z1 + nz},
+        {x1 - nx, y_top, z1 - nz}
+    };
+    makePolygon(end1_vertices, 4, edge_color);
+    
+    Vertex3D end2_vertices[4] = {
+        {x2 + nx, y_base, z2 + nz},
+        {x2 - nx, y_base, z2 - nz},
+        {x2 - nx, y_top, z2 - nz},
+        {x2 + nx, y_top, z2 + nz}
+    };
+    makePolygon(end2_vertices, 4, edge_color);
+}
+
 void draw_casa_museu(float x, float y, float z, float scale)
 {
     glPushMatrix();
@@ -230,54 +352,40 @@ void draw_casa_museu(float x, float y, float z, float scale)
     float house_depth = CASA_PROFUNDIDADE;
     float wall_height = CASA_ALTURA_PAREDE;
     float roof_height = CASA_ALTURA_TETO;
+    float wall_thickness = 0.1f; // Espessura das paredes internas
+    float floor_thickness = 0.1f; // Espessura do piso
+    
+    // Paredes internas com espessura usando makePolygon
+    
+    // Parede Esquerda Meio da Casa (com espessura)
+    draw_thick_wall(-house_width/6, -house_depth/16, -house_width/6, house_depth/4, 
+                   0, ESCADA_ALTURA_TOTAL + 0.04, wall_thickness);
 
-    // Parede Esquerda Meio da Casa
-    glColor3f(0.5, 0.5f, 0.5f); // Cinza claro
-    glBegin(GL_QUADS);
-        glVertex3f(-house_width/6, 0, -house_depth/4);
-        glVertex3f(-house_width/6, 0, house_depth/4);
-        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, house_depth/4);
-        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, -house_depth/4);
-    glEnd();
+    // Parede Direita Meio da Casa e Grudada na Escada (com espessura)
+    draw_thick_wall(ESCADA_LARGURA/2 + 0.15f, -house_depth/4, ESCADA_LARGURA/2 + 0.15f, house_depth/4,
+                   0, ESCADA_ALTURA_TOTAL + 0.04, wall_thickness);
 
-    // Parede Direita Meio da Casa e Grudada na Escada
-    glColor3f(0.5, 0.5f, 0.5f); // Cinza claro
-    glBegin(GL_QUADS);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, 0, -house_depth/4);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, 0, house_depth/4);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, house_depth/4);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, -house_depth/4);
-    glEnd();
-
+    // Pisos superiores com espessura usando makePolygon
+    
     // Piso Superior (1º Andar) começa na frente da escada
-    glColor3f(0.8f, 0.8f, 0.8f); // Cinza claro
-    glBegin(GL_QUADS);
-        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, -house_depth/4 + ESCADA_LARGURA);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, -house_depth/4 + ESCADA_LARGURA);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, house_depth/4);
-        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, house_depth/4);
-    glEnd();
+    draw_thick_floor(-house_width/6, -house_depth/4 + ESCADA_LARGURA,
+                    ESCADA_LARGURA/2 + 0.15f, house_depth/4,
+                    ESCADA_ALTURA_TOTAL, floor_thickness);
 
-    //piso Superior (1º Andar) parte esquerda 
-    glColor3f(0.8f, 0.8f, 0.8f); // Cinza claro
-    glBegin(GL_QUADS);
-        glVertex3f(-house_width/2, ESCADA_ALTURA_TOTAL, -house_depth/4);
-        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, -house_depth/4);
-        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, house_depth/4);
-        glVertex3f(-house_width/2, ESCADA_ALTURA_TOTAL, house_depth/4);
-    glEnd();
+    // Piso Superior (1º Andar) parte esquerda 
+    draw_thick_floor(-house_width/2, -house_depth/4 + ESCADA_LARGURA,
+                    -house_width/6, house_depth/4,
+                    ESCADA_ALTURA_TOTAL, floor_thickness);
 
-    // piso superior (1º Andar) parte direita
-    glColor3f(0.8f, 0.8f, 0.8f); // Cinza claro
-    glBegin(GL_QUADS);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, -house_depth/4);
-        glVertex3f(house_width/2, ESCADA_ALTURA_TOTAL, -house_depth/4);
-        glVertex3f(house_width/2, ESCADA_ALTURA_TOTAL, house_depth/4);
-        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, house_depth/4);
-    glEnd();
+    // Piso superior (1º Andar) parte direita
+    draw_thick_floor(ESCADA_LARGURA/2 + 0.15f, -house_depth/4 + ESCADA_LARGURA,
+                    house_width/2, house_depth/4,
+                    ESCADA_ALTURA_TOTAL, floor_thickness);
 
-    // Parede principal (frente)
+    // Paredes externas (mantendo GL_QUADS para as paredes principais)
     glColor3f(0.95f, 0.95f, 0.95f); // Branco
+    
+    // Parede principal (frente)
     glBegin(GL_QUADS);
         glVertex3f(-house_width/2, 0, house_depth/2);
         glVertex3f(house_width/2, 0, house_depth/2);
@@ -336,6 +444,7 @@ void draw_casa_museu(float x, float y, float z, float scale)
         glRotatef(90.0f, 0, 1, 0);
         draw_colonial_roof(0, wall_height, 0, house_depth + 1.0f, house_width + 1.0f, roof_height);
     glPopMatrix();
+    
     // Placa/plaqueta acima da porta
     glColor3f(0.3f, 0.3f, 0.3f);
     glPushMatrix();
