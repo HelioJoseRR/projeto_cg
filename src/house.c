@@ -258,6 +258,24 @@ void draw_casa_museu(float x, float y, float z, float scale)
         glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, house_depth/4);
     glEnd();
 
+    //piso Superior (1º Andar) parte esquerda 
+    glColor3f(0.8f, 0.8f, 0.8f); // Cinza claro
+    glBegin(GL_QUADS);
+        glVertex3f(-house_width/2, ESCADA_ALTURA_TOTAL, -house_depth/4);
+        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, -house_depth/4);
+        glVertex3f(-house_width/6, ESCADA_ALTURA_TOTAL, house_depth/4);
+        glVertex3f(-house_width/2, ESCADA_ALTURA_TOTAL, house_depth/4);
+    glEnd();
+
+    // piso superior (1º Andar) parte direita
+    glColor3f(0.8f, 0.8f, 0.8f); // Cinza claro
+    glBegin(GL_QUADS);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, -house_depth/4);
+        glVertex3f(house_width/2, ESCADA_ALTURA_TOTAL, -house_depth/4);
+        glVertex3f(house_width/2, ESCADA_ALTURA_TOTAL, house_depth/4);
+        glVertex3f(ESCADA_LARGURA/2 + 0.15f, ESCADA_ALTURA_TOTAL, house_depth/4);
+    glEnd();
+
     // Parede principal (frente)
     glColor3f(0.95f, 0.95f, 0.95f); // Branco
     glBegin(GL_QUADS);
