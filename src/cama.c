@@ -244,6 +244,7 @@ void draw_detalhes_cabeceira_colonial(float comprimento, float altura_cabeceira,
     glVertex3f(moldura_width/2.0f - detalhe_size, moldura_y_base + moldura_height + detalhe_size/2, z_pos);
     glVertex3f(moldura_width/2.0f - detalhe_size*2, moldura_y_base + moldura_height, z_pos);
     glEnd();
+
     
     glLineWidth(1.0f);
 }
