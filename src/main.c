@@ -6,6 +6,8 @@
 #include "../include/house.h"
 #include "../include/escada.h"
 #include "../include/moveis.h"
+#include "../include/cama.h"
+#include "../include/bule.h"
 
 #define FLOOR_SIZE 1000.0f
 #define PI 3.14159265359
@@ -32,9 +34,9 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(600, 600);
+    glutInitWindowSize(800, 600);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Casa Museu - Marechal Deodoro");
+    glutCreateWindow("Casa Museu - Marechal Deodoro com Camas Coloniais");
     init();
 
     glutDisplayFunc(display);
@@ -73,6 +75,17 @@ void display()
     // Desenhar móveis e objetos do museu
     glPushMatrix();
         draw_moveis_museu();
+    glPopMatrix();
+
+
+    // Desenhar as camas coloniais
+    glPushMatrix();
+        draw_camas_museu();
+    glPopMatrix();
+
+    // Desenhar bule branco embaixo da cama (ajuste posição conforme necessário)
+    glPushMatrix();
+        desenhaBuleBranco(0.0f, 0.05f, CASA_PROFUNDIDADE/2 - 2.0f, 0.3f);
     glPopMatrix();
 
     glutSwapBuffers();
@@ -131,6 +144,24 @@ void keyboard(unsigned char key, int x, int y)
             // Evita que a câmera vá abaixo do chão
             if(camera_y < 0.5f) camera_y = 0.5f;
             break;
+        case 'r':
+        case 'R':
+            // Reset da câmera para posição inicial
+            camera_x = 0.0f;
+            camera_y = 1.7f;
+            camera_z = 5.0f;
+            camera_yaw = 0.0f;
+            camera_pitch = 0.0f;
+            break;
+        case 'f':
+        case 'F':
+            // Posição especial para ver as camas no primeiro andar
+            camera_x = -1.0f;
+            camera_y = ESCADA_ALTURA_TOTAL + 1.0f;
+            camera_z = -2.0f;
+            camera_yaw = 45.0f;
+            camera_pitch = -15.0f;
+            break;
         default:
             break;
     }
@@ -179,4 +210,30 @@ void init()
 {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0, 0.0, 0.0, 1.0);
+    
+    // Habilitar iluminação básica para melhor visualização das camas
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    
+    // Configurar luz ambiente
+    GLfloat light_ambient[] = {0.3f, 0.3f, 0.3f, 1.0f};
+    GLfloat light_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat light_position[] = {0.0f, 10.0f, 0.0f, 1.0f};
+    
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    
+    // Permitir que as cores sejam definidas mesmo com iluminação
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    
+    printf("=== CONTROLES DA CASA MUSEU ===\n");
+    printf("WASD: Mover pela casa\n");
+    printf("Q/E: Subir/Descer\n");
+    printf("Setas: Olhar ao redor\n");
+    printf("R: Reset da câmera\n");
+    printf("F: Ver camas do primeiro andar\n");
+    printf("ESC: Sair\n");
+    printf("===============================\n");
 }

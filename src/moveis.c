@@ -12,6 +12,12 @@ void draw_moveis_museu()
     glTranslatef(-CASA_LARGURA/2 - 3.8f, 1.7f, -(CASA_PROFUNDIDADE - 6.0f));
     draw_cabideiro();
     glPopMatrix();
+
+    // Adiciona cama colonial perto da cabeceira
+    glPushMatrix();
+    // Posição próxima à cabeceira (ajuste conforme necessário)
+    draw_cama_colonial(0.0f, 0.05f, CASA_PROFUNDIDADE/2 - 2.0f, 1.8f, 1.2f, 0.55f, 0.0f);
+    glPopMatrix();
 }
 
 void draw_mesa_exposicao(float x, float y, float z)

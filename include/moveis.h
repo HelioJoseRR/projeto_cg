@@ -4,9 +4,10 @@
 #include <GL/glut.h>
 #include "dimensoes.h"
 #include "makePolygon.h"
+#include "cama.h"
 
 /**
- * Desenha todos os móveis e objetos do museu
+ * Desenha todos os móveis e objetos do museu, incluindo cama colonial
  */
 void draw_moveis_museu();
 
