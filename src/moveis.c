@@ -1,6 +1,8 @@
 #include "../include/moveis.h"
 #include "../include/dimensoes.h"
 #include "../include/makePolygon.h"
+#include "../include/bule.h"
+#include "../include/cama.h"
 #include <GL/glut.h>
 #include <math.h>
 
@@ -12,6 +14,20 @@ void draw_moveis_museu()
     glTranslatef(-CASA_LARGURA/2 - 3.8f, 1.7f, -(CASA_PROFUNDIDADE - 6.0f));
     draw_cabideiro();
     glPopMatrix();
+
+    //cama e bule
+
+    glPushMatrix();
+    glTranslatef(-CASA_LARGURA/2 - 2.5f, 0.0f, -(CASA_PROFUNDIDADE - 6.0f));
+        glPushMatrix();
+            draw_cama_colonial(0.0f, 0.0f, 0.0f, 2.0f, 1.4f, 0.5f, 0.0f);
+        glPopMatrix();
+
+        glPushMatrix();
+            desenhaBuleBranco(-0.5f, 0.15f, 1.0f, 0.3f);
+        glPopMatrix();
+    glPopMatrix();
+
 }
 
 void draw_mesa_exposicao(float x, float y, float z)
