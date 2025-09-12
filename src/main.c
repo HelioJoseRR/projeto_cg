@@ -228,7 +228,7 @@ void draw_button()
     
     // Desenhar o fundo do botão (vermelho)
     if (button_state) {
-        glColor3f(0.8f, 0.2f, 0.2f);  // Vermelho mais escuro quando ativado
+        glColor3f(0.0f, 1.0f, 0.0f); // Vermelho mais escuro quando ativado
     } else {
         glColor3f(1.0f, 0.3f, 0.3f);  // Vermelho normal
     }

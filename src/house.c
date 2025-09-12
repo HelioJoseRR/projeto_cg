@@ -365,8 +365,9 @@ void draw_casa_museu(float x, float y, float z, float scale, bool button_state)
     float wall_thickness = 0.1f; // Espessura das paredes internas
     float floor_thickness = 0.1f; // Espessura do piso
     
-    // Paredes internas com espessura usando makePolygon
     
+
+    // Paredes internas com espessura usando makePolygon
     // Parede Esquerda Meio da Casa (com espessura)
     draw_thick_wall(-house_width/6, -house_depth/16, -house_width/6, house_depth/4, 
                    0, ESCADA_ALTURA_TOTAL + 0.04, wall_thickness);
@@ -376,21 +377,42 @@ void draw_casa_museu(float x, float y, float z, float scale, bool button_state)
                    0, ESCADA_ALTURA_TOTAL + 0.04, wall_thickness);
 
     // Pisos superiores com espessura usando makePolygon
-    
     // Piso Superior (1º Andar) começa na frente da escada
     draw_thick_floor(-house_width/6, -house_depth/4 + ESCADA_LARGURA,
                     ESCADA_LARGURA/2 + 0.15f, house_depth/4,
                     ESCADA_ALTURA_TOTAL, floor_thickness);
 
     // Piso Superior (1º Andar) parte esquerda 
-    draw_thick_floor(-house_width/2, -house_depth/4 + ESCADA_LARGURA,
-                    -house_width/6, house_depth/4,
+    draw_thick_floor(-house_width/2 + 0.05f, -house_depth/4 + ESCADA_LARGURA,
+                    -house_width/6 + 0.05f, house_depth/4,
                     ESCADA_ALTURA_TOTAL, floor_thickness);
 
     // Piso superior (1º Andar) parte direita
-    draw_thick_floor(ESCADA_LARGURA/2 + 0.15f, -house_depth/4 + ESCADA_LARGURA,
-                    house_width/2, house_depth/4,
+    draw_thick_floor(ESCADA_LARGURA/2 + 0.15f - 0.05f, -house_depth/4 + ESCADA_LARGURA,
+                    house_width/2 - 0.05f, house_depth/4,
                     ESCADA_ALTURA_TOTAL, floor_thickness);
+
+    // draw corrimaos primeiro andar
+    // corrimao frontal
+    // bases do corrimão
+    int num_corrimaos = house_width / 1.2f; // Um corrimão a cada 0.5 unidades
+    float corrimao_height = 1.0f; // Altura do corrim
+    float corrimao_depth = 0.05f; // Profundidade do corrimão
+    float corrimao_thickness = 0.05f; // Espessura do corrimão
+    float start_x = -house_width/2 + 0.25f; // Começa um pouco afastado da borda
+    float z_pos = house_depth/4 - 0.08f; // Posicionado na borda do piso    
+
+    for(int i = 0; i < num_corrimaos; i++) {
+        float x_pos = start_x + i * 1.2f;
+        draw_thick_wall(x_pos, z_pos, x_pos, z_pos + corrimao_depth,
+                        ESCADA_ALTURA_TOTAL, ESCADA_ALTURA_TOTAL + corrimao_height, corrimao_thickness);
+    }
+    // base horizontal
+    draw_thick_wall(-house_width/2 + 0.25f, z_pos + corrimao_depth/2,
+                    house_width/2 - 0.25f, z_pos + corrimao_depth/2,
+                    ESCADA_ALTURA_TOTAL + corrimao_height - corrimao_thickness/2,
+                    ESCADA_ALTURA_TOTAL + corrimao_height + corrimao_thickness/2,
+                    corrimao_thickness);
 
     // Paredes externas (mantendo GL_QUADS para as paredes principais)
     glColor3f(0.95f, 0.95f, 0.95f); // Branco
