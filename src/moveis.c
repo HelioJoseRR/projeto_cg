@@ -123,10 +123,10 @@ void draw_cabideiro(){
     float espacamento = CABIDEIRO_LARGURA / (qtd_cabides + 1);
     for(int i = 1; i <= qtd_cabides; i++){
         glPushMatrix();
-        glTranslatef(-CABIDEIRO_LARGURA/2 + i * espacamento, CABIDEIRO_ALTURA - 0.1f, 0.0f);
+        glTranslatef(-CABIDEIRO_LARGURA/2 + i * espacamento, CABIDEIRO_ALTURA - 0.1f, -0.05f);
         glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
         glColor3f(cor_cabides.r, cor_cabides.g, cor_cabides.b);
-        glutSolidTeapot(0.05f);
+        glutSolidTeapot(0.08f);
         glPopMatrix();
     }
     

@@ -1,6 +1,7 @@
 #include "../include/house.h"
 #include "../include/dimensoes.h"
 #include "../include/makePolygon.h"
+#include <stdbool.h>
 #include <GL/glut.h>
 #include <math.h>
 
@@ -66,10 +67,19 @@ void draw_colonial_window(float x, float y, float z, float width, float height)
     glPopMatrix();
 }
 
-void draw_colonial_door(float x, float y, float z, float width, float height)
+void draw_colonial_door(float x, float y, float z, float width, float height , bool button_state)
 {
     glPushMatrix();
     glTranslatef(x, y, z);
+
+    if(button_state) {
+        // Porta aberta (rotacionada 90 graus para dentro)
+        glTranslatef(-width/2, 0, 0); // Ajustar ponto de rotação
+        glRotatef(-90, 0, 1, 0);
+        glTranslatef(width/2, 0, 0); // Reajustar posição
+    }
+
+     
     
     // Moldura bege da porta
     glColor3f(0.9f, 0.85f, 0.7f);
@@ -341,7 +351,7 @@ void draw_thick_wall(float x1, float z1, float x2, float z2, float y_base, float
     makePolygon(end2_vertices, 4, edge_color);
 }
 
-void draw_casa_museu(float x, float y, float z, float scale)
+void draw_casa_museu(float x, float y, float z, float scale, bool button_state)
 {
     glPushMatrix();
     glTranslatef(x, y, z);
@@ -386,13 +396,37 @@ void draw_casa_museu(float x, float y, float z, float scale)
     glColor3f(0.95f, 0.95f, 0.95f); // Branco
     
     // Parede principal (frente)
+    /*
     glBegin(GL_QUADS);
         glVertex3f(-house_width/2, 0, house_depth/2);
         glVertex3f(house_width/2, 0, house_depth/2);
         glVertex3f(house_width/2, wall_height, house_depth/2);
         glVertex3f(-house_width/2, wall_height, house_depth/2);
     glEnd();
+    */
     
+    glBegin(GL_QUADS);
+        glVertex3f(-house_width/2, 0, house_depth/2);
+        glVertex3f(-PORTA_LARGURA/2, 0, house_depth/2);
+        glVertex3f(-PORTA_LARGURA/2, wall_height, house_depth/2);
+        glVertex3f(-house_width/2, wall_height, house_depth/2);
+    glEnd();
+
+    glBegin(GL_QUADS);
+        glVertex3f(PORTA_LARGURA/2, 0, house_depth/2);
+        glVertex3f(house_width/2, 0, house_depth/2);
+        glVertex3f(house_width/2, wall_height, house_depth/2);
+        glVertex3f(PORTA_LARGURA/2, wall_height, house_depth/2);
+    glEnd();
+
+    glBegin(GL_QUADS);
+        glVertex3f(-PORTA_LARGURA/2, PORTA_ALTURA, house_depth/2);
+        glVertex3f(PORTA_LARGURA/2, PORTA_ALTURA, house_depth/2);
+        glVertex3f(PORTA_LARGURA/2, wall_height, house_depth/2);
+        glVertex3f(-PORTA_LARGURA/2, wall_height, house_depth/2);
+    glEnd();
+    
+
     // Parede traseira
     glBegin(GL_QUADS);
         glVertex3f(-house_width/2, 0, -house_depth/2);
@@ -418,7 +452,7 @@ void draw_casa_museu(float x, float y, float z, float scale)
     glEnd();
     
     // Porta central
-    draw_colonial_door(0, 0, house_depth/2 + 0.01f, 1.2f, 2.8f);
+    draw_colonial_door(0, 0, house_depth/2 + 0.01f, 1.2f, 2.8f, button_state);
     
     // Janelas da frente (2 de cada lado da porta)
     GLfloat window_space_between = 1.5f;

@@ -2,6 +2,7 @@
 #define HOUSE_H
 
 #include <GL/glut.h>
+#include <stdbool.h>
 
 /**
  * @brief Desenha a Casa Museu do Marechal Deodoro
@@ -10,7 +11,7 @@
  * @param z Posição Z da casa
  * @param scale Escala da casa (1.0 = tamanho original)
  */
-void draw_casa_museu(float x, float y, float z, float scale);
+void draw_casa_museu(float x, float y, float z, float scale, bool button_state);
 
 /**
  * @brief Desenha uma janela colonial com grades decorativas
@@ -26,7 +27,7 @@ void draw_colonial_window(float x, float y, float z, float width, float height);
  * @param width Largura da porta
  * @param height Altura da porta
  */
-void draw_colonial_door(float x, float y, float z, float width, float height);
+void draw_colonial_door(float x, float y, float z, float width, float height , bool button_state);
 
 /**
  * @brief Desenha o telhado colonial

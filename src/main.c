@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdbool.h>
 #include "../include/floor.h"
 #include "../include/house.h"
 #include "../include/escada.h"
@@ -21,12 +22,23 @@ float camera_pitch = 0.0f; // Rotação vertical (cima/baixo)
 float move_speed = 0.5f;   // Velocidade de movimento
 float mouse_sensitivity = 2.0f; // Sensibilidade do mouse/setas
 
+// Variáveis do botão
+bool button_state = false;  // Variável global que será alterada
+int button_x = 20;          // Posição X do botão na tela
+int button_y = 20;          // Posição Y do botão na tela
+int button_width = 120;     // Largura do botão
+int button_height = 30;     // Altura do botão
+
 void display();
 void reshape(int width, int height);
 void keyboard(unsigned char key, int x, int y);
 void special_keyboard(int key, int x, int y);
+void mouse(int button, int state, int x, int y);
 void init();
 void update_camera();
+void draw_button();
+void draw_text(float x, float y, const char* text);
+bool is_point_in_button(int x, int y);
 
 int main(int argc, char **argv)
 {
@@ -41,6 +53,7 @@ int main(int argc, char **argv)
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(special_keyboard);
+    glutMouseFunc(mouse);
 
     glutMainLoop();
     return 0;
@@ -60,7 +73,7 @@ void display()
 
     // Desenhar a Casa Museu completa
     glPushMatrix();
-        draw_casa_museu(0.0f, 0.0f, 0.0f, CASA_SCALE);
+        draw_casa_museu(0.0f, 0.0f, 0.0f, CASA_SCALE, button_state);
     glPopMatrix();
     
     // Desenhar a escada em U
@@ -74,6 +87,9 @@ void display()
     glPushMatrix();
         draw_moveis_museu();
     glPopMatrix();
+
+    // Desenhar o botão na interface
+    draw_button();
 
     glutSwapBuffers();
 }
@@ -160,6 +176,22 @@ void special_keyboard(int key, int x, int y)
     glutPostRedisplay();
 }
 
+void mouse(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        // Verificar se o clique foi dentro do botão
+        if (is_point_in_button(x, y)) {
+            // Alterar o estado da variável
+            button_state = !button_state;
+            
+            // Debug: imprimir o estado atual
+            printf("Botão clicado! Novo estado: %s\n", button_state ? "true" : "false");
+            
+            glutPostRedisplay();
+        }
+    }
+}
+
 void update_camera()
 {
     float yaw_rad = camera_yaw * PI / 180.0f;
@@ -175,8 +207,83 @@ void update_camera()
               0.0, 1.0, 0.0);                // Vetor "up"
 }
 
+void draw_button()
+{
+    // Salvar o estado atual das matrizes
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    
+    // Configurar projeção ortogonal para UI 2D
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glOrtho(0, viewport[2], viewport[3], 0, -1, 1);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    
+    // Desabilitar teste de profundidade para UI
+    glDisable(GL_DEPTH_TEST);
+    
+    // Desenhar o fundo do botão (vermelho)
+    if (button_state) {
+        glColor3f(0.8f, 0.2f, 0.2f);  // Vermelho mais escuro quando ativado
+    } else {
+        glColor3f(1.0f, 0.3f, 0.3f);  // Vermelho normal
+    }
+    
+    glBegin(GL_QUADS);
+        glVertex2f(button_x, button_y);
+        glVertex2f(button_x + button_width, button_y);
+        glVertex2f(button_x + button_width, button_y + button_height);
+        glVertex2f(button_x, button_y + button_height);
+    glEnd();
+    
+    // Desenhar borda do botão
+    glColor3f(0.0f, 0.0f, 0.0f);  // Preto
+    glLineWidth(2.0f);
+    glBegin(GL_LINE_LOOP);
+        glVertex2f(button_x, button_y);
+        glVertex2f(button_x + button_width, button_y);
+        glVertex2f(button_x + button_width, button_y + button_height);
+        glVertex2f(button_x, button_y + button_height);
+    glEnd();
+    
+    // Desenhar o texto do botão
+    glColor3f(1.0f, 1.0f, 1.0f);  // Branco
+    draw_text(button_x + 15, button_y + 20, "Clique aqui");
+    
+    // Restaurar configurações anteriores
+    glEnable(GL_DEPTH_TEST);
+    
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void draw_text(float x, float y, const char* text)
+{
+    glRasterPos2f(x, y);
+    
+    while (*text) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *text);
+        text++;
+    }
+}
+
+bool is_point_in_button(int x, int y)
+{
+    return (x >= button_x && x <= button_x + button_width &&
+            y >= button_y && y <= button_y + button_height);
+}
+
 void init()
 {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0, 0.0, 0.0, 1.0);
+    
+    // Inicializar estado do botão
+    printf("Estado inicial do botão: %s\n", button_state ? "true" : "false");
 }
